@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="shortcut icon" href="https://th.bing.com/th/id/R.770b805d5c99c7931366c2e84e88f251?rik=TqHsCsZOC8Bnqw&pid=ImgRaw&r=0" type="image/x-icon">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weather App</title>
+  <style>
+  * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
+}
+.main {
+  width: 90%;
+  max-width: 470px;
+  background: linear-gradient(135deg, #1c81e6, #7b92afed);
+  color: #fff;
+  margin: 20px;
+  margin: 100px auto 0;
+  padding: 40px 35px;
+  border-radius: 15px;
+  text-align: center;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3), 0 15px 30px rgba(0, 0, 0, 0.426);
+  height: 30em;
+}
+.main h1 {
+  margin-bottom: 20px;
+  text-align: center;
+  font-size: 30px;
+}
+
+    body {
+    background-color: #555;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    padding: 20px;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    display: -moz-box;
+  }
+  input {
+    padding: 10px;
+    font-size: 16px;
+    width: 250px;
+  }
+  button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: white;
+    color: black;
+    border: none;
+    cursor: pointer;
+    width: 9em;
+    height: 3em;
+    border-radius: 30em;
+    font-size: 15px;
+    font-family: inherit;
+    border: none;
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+    z-index: 1;
+    box-shadow: 6px 6px 12px #c5c5c5, -6px -6px 12px #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  button::before {
+    content: '';
+    width: 0;
+    height: 3em;
+    border-radius: 30em;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-image: linear-gradient(to right, #2f57a0 10%, hsl(0, 100%, 50%) 100%);
+    transition: .3s ease;
+    display: block;
+    z-index: -1;
+  }
+  
+  button:hover::before {
+    width: 9em;
+  }
+  #weatherDisplay {
+    margin-top: 100px;
+    border-radius: 8px;
+    font-size: 25px;
+  }.search {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+.search input {
+  border: 0;
+  outline: 0;
+  background: #ebfffc;
+  color: #555;
+  padding: 10px 25px;
+  height: 60px;
+  border-radius: 30px;
+  flex: 1;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2),
+    0 15px 30px inset rgba(0, 0, 0, 0.3);
+  font-size: 18px;
+}
+.search button {
+  border: 0;
+  outline: 0;
+  background: #ebfffc;
+  border-radius: 50%;
+  font-size: 25px;
+  width: 55px;
+  height: 55px;
+  cursor: pointer;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2),
+    0 15px 30px inset rgba(0, 0, 0, 0.3);
+}
+.search button:hover {
+  box-shadow: 0 15px 30px inset rgba(0, 0, 0, 0.2),
+    0 15px 30px rgba(0, 0, 0, 0.3);
+  transition: 0.3s ease-in-out;
+}
+  </style>
+</head>
+<body>
+  <div class="main">
+<center>
+  <h1>Weather Checker</h1>
+  <div class="search">
+   <input type="text" id="cityInput" placeholder="Enter city name">
+   <button id="searchButton">🔍</button>
+  </div> 
+<div id="weatherDisplay"></div>
+<div id="temp"></div>
+<div id="humidity"></div>
+</center>
+  </div>
+
+<script>
+  const apiKey = "b38271de5ea96a7eb6ade62088f52c8e";
+    const searchButton = document.getElementById("searchButton");
+    const cityInput = document.getElementById("cityInput");
+    const weatherDisplay = document.getElementById("weatherDisplay");
+
+    searchButton.addEventListener("click", () => {
+      const city = cityInput.value;
+      if (city) {
+        fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`)
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.cod === 200) {
+              const weatherInfo = `
+                <h2>${data.name}, ${data.sys.country}</h2>
+                <p>Temperature: ${data.main.temp}°C</p>
+                <p>Condition: ${data.weather[0].description}</p>
+                <p>Humidity: ${data.main.humidity}%</p>
+              `;
+              weatherDisplay.innerHTML = weatherInfo;
+            } else {
+              weatherDisplay.innerHTML = `<p>City not found. Try again!</p>`;
+            }
+          })
+          .catch(() => {
+            weatherDisplay.innerHTML = `<p>Something went wrong. Please try again later.</p>`;
+          });
+      } else {
+        weatherDisplay.innerHTML = `<p>Please enter a city name.</p>`;
+      }
+    });
+
+</script>
+</body>
+</html>
